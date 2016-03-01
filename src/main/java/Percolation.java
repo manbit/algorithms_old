@@ -1,110 +1,94 @@
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
-
-    // this private field stores the dimension of the grid
+    // dimension of the grid
     private int N;
-
-    // we use a weighted quick union-find data structure to model the connection amongst sites in the composite system
-    private WeightedQuickUnionUF wquf;
-
-    // we use this private integer array to maintain which sites are open and which are closed closed = -1, open = 0
+    // 0 - open, 1 - closed
     private int[] sites;
-
-    // this private method helps us retrieve the index of a site in the grid as represented in the WeightedQuickUnion object
-    private int getIndex(int i, int j) {
-        return ((i-1)*N + j);
-    }
-
-    // this private method checks if a cell is a valid cell or not
-    private boolean validate(int i, int j) {
-        return (i >= 1 && i <= N && j >= 1 && j <= N);
-    }
+    //
+    private WeightedQuickUnionUF wquf;
 
     // create N-by-N grid, with all sites blocked
     public Percolation(int N) {
         if(N <= 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(String.format("N %d",N));
         }
-
-        // assign the dimension of the grid and also the sites array
         this.N = N;
-        this.sites = new int[N*N + 2];
-
-        // bot the top and the bottom sites are open initially rest all are closed sites
-        this.sites[0] = this.sites[N*N + 1] = 0;
-        for(int i = 1; i < N*N + 1; ++i) {
-            this.sites[i] = -1;
-        }
-        // we allocate additional two sites which act as the top and bottom sites in the Percolation grid
-        this.wquf = new WeightedQuickUnionUF(N*N + 2);
+        sites = new int[N * N + 2];
+        wquf = new WeightedQuickUnionUF(N * N + 2);
+        sites[0] = 1;
+        sites[sites.length -1 ] = 1;
     }
 
-    // open site (row i, column j) if it is not open already
-    public void open(int i, int j) {
-        if(!validate(i, j)) {
-            throw new IndexOutOfBoundsException();
+    // open site (row row, column column) if it is not open already
+    public void open(int row, int column) {
+        if (!isValid(row, column)) {
+            throw new IllegalArgumentException(String.format("Row %d, column %d", row, column));
         }
 
-        if(!isOpen(i, j)) {
-            int index = getIndex(i, j);
-            sites[index] = 0;
+        if (isOpen(row, column)) {
+            return;
+        }
 
-            // if the site is a top site
-            if(i == 1) {
-                wquf.union(index, 0);
-            }
+        sites[getIndex(row, column)] = 1;
 
-            // if the site is a bottom site
-            if(i == N) {
-                wquf.union(index, N*N + 1);
-            }
+        if (row == 1 && column == 1) {
+            wquf.union(0, getIndex(row, column));
+        }
 
-            // if the site above is open
-            if(validate(i-1, j) && isOpen(i-1, j)) {
-                wquf.union(index, getIndex(i-1, j));
-            }
+        if (row == N && column == N) {
+            wquf.union(sites.length - 1, getIndex(row, column));
+        }
 
-            // if the site below is open
-            if(validate(i+1, j) && isOpen(i+1, j)) {
-                wquf.union(index, getIndex(i+1, j));
-            }
-
-            // if the site towards left is open
-            if(validate(i, j-1) && isOpen(i, j-1)) {
-                wquf.union(index, getIndex(i, j-1));
-            }
-
-            // if the site towards right is open
-            if(validate(i, j+1) && isOpen(i, j+1)) {
-                wquf.union(index, getIndex(i, j+1));
-            }
+//        if the left site is open - union them
+        if (column > 1 && isOpen(row, column - 1)) {
+            wquf.union(row, column -1);
+        }
+//        if the top site is open - union them
+        if (row > 1 && isOpen(row - 1, column)) {
+            wquf.union(row -1, column);
+        }
+//        if the right site is open - union them
+        if (column < N && isOpen(row, column + 1)) {
+            wquf.union(row, column + 1);
+        }
+//        if the bottom site is open - union them
+        if (row < N && isOpen((row + 1), column)) {
+            wquf.union(row + 1, column);
         }
     }
 
-    // is site (row i, column j) open?
-    public boolean isOpen(int i, int j) {
-        if(!validate(i, j)) {
-            throw new IndexOutOfBoundsException();
+    // is site (row row, column column) open?
+    public boolean isOpen(int row, int column) {
+        if (!isValid(row, column)) {
+            throw new IllegalArgumentException(String.format("Row %d, column %d", row, column));
         }
-
-        return sites[getIndex(i,j)] == 0;
+        return sites[getIndex(row, column)] == 1;
     }
 
-    // is site (row i, column j) full?
-    public boolean isFull(int i, int j) {
-        if(!validate(i, j)) {
-            throw new IndexOutOfBoundsException();
+    // is site (row row, column column) full?
+    public boolean isFull(int row, int column) {
+        if(!isValid(row, column)) {
+            throw new IndexOutOfBoundsException(String.format("Row %d, column %d", row, column));
         }
 
-        return this.wquf.connected(0, getIndex(i,j));
+        return this.wquf.connected(0, getIndex(row,column));
     }
 
     // does the system percolate?
     public boolean percolates() {
-        return this.wquf.connected(0, N*N + 1);
+        return wquf.connected(0, N*N + 1);
     }
 
+    private boolean isValid(int row, int column) {
+        return row > 0 && row <= N*N && column > 0 && column <= N*N;
+    }
+
+    private int getIndex(int row, int column) {
+        return (row - 1)  * N + column;
+    }
+
+    // test client (optional)
     public static void main(String[] args) {
 
     }

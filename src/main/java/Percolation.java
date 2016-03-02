@@ -30,31 +30,32 @@ public class Percolation {
             return;
         }
 
-        sites[getIndex(row, column)] = 1;
+        final int index = getIndex(row, column);
+        sites[index] = 1;
 
         if (row == 1 && column == 1) {
-            wquf.union(0, getIndex(row, column));
+            wquf.union(index, 0);
         }
 
         if (row == N && column == N) {
-            wquf.union(sites.length - 1, getIndex(row, column));
+            wquf.union(index, sites.length - 1);
         }
 
 //        if the left site is open - union them
         if (column > 1 && isOpen(row, column - 1)) {
-            wquf.union(row, column -1);
+            wquf.union(index, getIndex(row, column - 1));
         }
 //        if the top site is open - union them
         if (row > 1 && isOpen(row - 1, column)) {
-            wquf.union(row -1, column);
+            wquf.union(index, getIndex(row - 1, column));
         }
 //        if the right site is open - union them
         if (column < N && isOpen(row, column + 1)) {
-            wquf.union(row, column + 1);
+            wquf.union(index, getIndex(row, column + 1));
         }
 //        if the bottom site is open - union them
         if (row < N && isOpen((row + 1), column)) {
-            wquf.union(row + 1, column);
+            wquf.union(index, getIndex(row + 1, column));
         }
     }
 

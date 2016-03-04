@@ -25,7 +25,7 @@
   <dependencies>
 
     <dependency>
-      <groupId>edu.princeton.cs.introcs</groupId>
+      <groupId>edu.princeton.cs.algs4</groupId>
       <artifactId>algs4-package</artifactId>
       <version>1.0</version>
     </dependency>

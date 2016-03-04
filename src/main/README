@@ -1,0 +1,1 @@
+mvn install:install-file -Dfile=../algs4.jar -DgroupId=edu.princeton.cs.algs4 -DartifactId=algs4-package -Dversion=1.0 -Dpackaging=jar

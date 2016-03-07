@@ -1,1 +1,18 @@
 mvn install:install-file -Dfile=../algs4.jar -DgroupId=edu.princeton.cs.algs4 -DartifactId=algs4-package -Dversion=1.0 -Dpackaging=jar
+
+
+To add the libs to your project. Add this repository to <repositories> block:
+
+<repository>
+  <id>org.coursera.algs4</id>
+  <name>Algs4 coursera course custom repository</name>
+  <url>https://raw.github.com/slok/algs4-mvn-repo/master</url>
+</repository>
+
+In August 2015 the authors have merged stdlib into algs4.jar and moved classes into 'edu.princeton.cs.algs4' package. To use this variant add the following dependency:
+
+<dependency>
+  <groupId>edu.princeton.cs.algs4</groupId>
+  <artifactId>algs4</artifactId>
+  <version>1.0</version>
+</dependency>

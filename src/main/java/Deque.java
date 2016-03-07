@@ -1,9 +1,7 @@
-import edu.princeton.cs.introcs.StdOut;
-
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import static edu.princeton.cs.introcs.StdOut.print;
+import static edu.princeton.cs.algs4.StdOut.println;
 
 public class Deque<Item> implements Iterable<Item> {
 
@@ -24,16 +22,16 @@ public class Deque<Item> implements Iterable<Item> {
         deque.addFirst("First-1");
         deque.addLast("Last-1");
         String item = deque.removeFirst();
-        print(item);
+        println(item);
         item = deque.removeLast();
-        print(item);
+        println(item);
         Iterator<String> iterator = deque.iterator();
         while (iterator.hasNext()) {
-            print(iterator.next());
+            println(iterator.next());
             iterator.remove();
         }
         while (iterator.hasNext()) {
-            print(iterator.next());
+            println(iterator.next());
         }
     }   // unit testing
 

@@ -28,7 +28,7 @@ public class Deque<Item> implements Iterable<Item> {
         Iterator<String> iterator = deque.iterator();
         while (iterator.hasNext()) {
             println(iterator.next());
-            iterator.remove();
+//            iterator.remove();
         }
         while (iterator.hasNext()) {
             println(iterator.next());
@@ -109,24 +109,27 @@ public class Deque<Item> implements Iterable<Item> {
 
     public class DequeIterator<Item> implements Iterator<Item> {
 
-        private Node current;
+        private Node next;
 
         public DequeIterator() {
-            this.current = head;
+            this.next = head;
         }
 
         public boolean hasNext() {
-            return current != null && current.next != null;
+            return next != null && next.value != null;
         }
 
         public Item next() {
-            Item next = (Item) current.value;
-            current = current.next;
+            if (next.value == null) {
+                throw new NoSuchElementException();
+            }
+            Item next = (Item) this.next.value;
+            this.next = this.next.next;
             return next;
         }
 
         public void remove() {
-            current = current.next;
+            throw new UnsupportedOperationException();
         }
     }
 

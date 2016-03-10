@@ -42,29 +42,32 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         } else if (items.length == size) {
             temp = items;
             items = (Item[]) new Object[size * 2];
-        } else if (items.length / size >= 2) {
+        } else if (items.length / size >= 4) {
             temp = items;
             items = (Item[]) new Object[items.length / 2];
         } else {
             return;
         }
 
-        int newIndex = 0;
-        for (Item existinItem : temp) {
-            items[newIndex++] = existinItem;
+        int newSize = 0;
+        for (Item old : temp) {
+            if (old != null) {
+                items[newSize++] = old;
+            }
         }
-        size = items.length - 1;
+        size = newSize;
     }
 
     public Item dequeue() {
         if (size == 0) {
             throw new NoSuchElementException();
         }
-        checkResize();
 
         int randomIndex = StdRandom.uniform(size);
         Item itemForReturn = items[randomIndex];
         items[randomIndex] = null;
+        size--;
+        checkResize();
         return itemForReturn;
     }                    // remove and return a random item
 

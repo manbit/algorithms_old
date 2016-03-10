@@ -37,7 +37,9 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     private void checkResize() {
         Item[] temp;
-        if (items.length == size) {
+        if (size == 0) {
+            return;
+        } else if (items.length == size) {
             temp = items;
             items = (Item[]) new Object[size * 2];
         } else if (items.length / size >= 2) {
@@ -51,7 +53,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         for (Item existinItem : temp) {
             items[newIndex++] = existinItem;
         }
-        size = newIndex;
+        size = items.length - 1;
     }
 
     public Item dequeue() {

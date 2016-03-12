@@ -85,7 +85,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         return copy;
     }
 
-    public class RandomizeQueueIterator<Item> implements Iterator<Item> {
+    private class RandomizeQueueIterator<Item> implements Iterator<Item> {
         private Item[] instantCopy = (Item[]) generateShuffledCopy(items);
         private int nextIndex = 0;
 
